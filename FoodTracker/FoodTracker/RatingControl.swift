@@ -13,11 +13,19 @@ import UIKit
 {
     //Array of buttons
     private var ratingButtons = [UIButton]()
+    
+    //Whenever the value of rating changes from user input, didSet will call updateButtonSelectionStates
     var rating = 0
+    {
+        didSet
+        {
+            updateButtonSelectionStates()
+        }
+    }
     
     //@IBInspectable puts these properties in the Attributes Inspector of the storyboard
     //CGSize defines size of the buttons
-    //didSet is a property observer. When adjusting properties in the Attributes Inspector, this property observer will change the width and height and number of stars. The purpose is to see the changes at design time.
+    //didSet is a property observer. When adjusting properties in the Attributes Inspector, this property observer will change the width and height and number of stars.
     @IBInspectable var starSize: CGSize = CGSize(width: 44.0, height: 44.0)
     {
         didSet
@@ -115,6 +123,17 @@ import UIKit
             addArrangedSubview(button)
             //Add button to list
             ratingButtons.append(button)
+            
+            updateButtonSelectionStates()
+        }
+    }
+    
+    private func updateButtonSelectionStates()
+    {
+        for (index, button) in ratingButtons.enumerated()
+        {
+            // If the index of a button is less than the rating, that button should be selected.
+            button.isSelected = index < rating
         }
     }
 }
